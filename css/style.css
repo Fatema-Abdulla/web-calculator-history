@@ -9,9 +9,9 @@ body {
   background: #e5e5e5;
   display: flex;
   justify-content: center;
-  gap: 30px;
   align-items: center;
   height: 100vh;
+  padding: 20px;
 }
 
 .calculator {
@@ -75,4 +75,67 @@ body {
 
 #n14 {
   background: #ff8a00;
+}
+
+/*  Responsive 920px */
+@media (max-width: 920px) {
+  .calculator {
+    width: 260px;
+    padding: 15px;
+  }
+
+  .container-result {
+    width: 180px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .clear-result {
+    width: 55px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .numbers {
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .button-number {
+    gap: 10px;
+  }
+}
+
+/*  Phones 600px */
+@media (max-width: 600px) {
+  body {
+    height: auto;
+    padding-top: 40px;
+  }
+
+  .calculator {
+    width: 95vw;
+  }
+
+  .container-result {
+    width: 70%;
+    height: 50px;
+    font-size: 22px;
+  }
+
+  .clear-result {
+    width: 25%;
+    height: 50px;
+    font-size: 22px;
+  }
+
+  .numbers {
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .button-number {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
 }
