@@ -68,53 +68,53 @@ const clickButton = (index) => {
     }
   } else {
     if (currentNumber !== "") {
-      clickedNumber.push(currentNumber)
+      clickedNumber.push(parseFloat(currentNumber))
       currentNumber = ""
     }
     clickedNumber.push(indexNumber)
-    console.log("clicked:" +clickedNumber)
   }
   screenResult.appendChild(specificNumber)
 }
 
 const finalResult = () => {
-  const onlyNumbers = clickedNumber.filter((num) => num >= "0" && num <= "9")
-  console.log("number " + onlyNumbers)
-  if (clickedNumber.includes("+")) {
-    // reference: https://stackabuse.com/bytes/strip-non-numeric-characters-from-a-string-in-javascript/
+  screenResult.innerHTML = ""
+  const onlyNumbers = clickedNumber.filter((num) => typeof num === 'number')
 
+  const finalSolve = document.createElement("span")
+  finalSolve.setAttribute("class", "solve")
+  finalSolve.innerText = ""
+  screenResult.appendChild(finalSolve)
+
+  if (clickedNumber.includes("+")) {
     onlyNumbers.forEach((num) => {
-      result += parseFloat(num)
+      result += num
     })
-    const total = document.createElement("span")
-    total.setAttribute("class", "total")
-    total.innerText = result
-    screenResult.appendChild(total)
+    finalSolve.innerText = result
   } else if (clickedNumber.includes("-")) {
-    result = parseFloat(onlyNumbers[0])
+    result = onlyNumbers[0]
     onlyNumbers.slice(1).forEach((num) => {
-      result -= parseFloat(num)
+      result -= num
     })
-    const sub = document.createElement("span")
-    sub.setAttribute("class", "sub")
-    sub.innerText = result
-    screenResult.appendChild(sub)
+    finalSolve.innerText = result
   } else if (clickedNumber.includes("×")) {
-    result = parseFloat(onlyNumbers[0])
+    result = onlyNumbers[0]
     onlyNumbers.slice(1).forEach((num) => {
-      result *= parseFloat(num)
+      result *= num
     })
-    const sub = document.createElement("span")
-    sub.setAttribute("class", "sub")
-    sub.innerText = result
-    screenResult.appendChild(sub)
+    finalSolve.innerText = result
+  } else if (clickedNumber.includes("÷")) {
+    result = onlyNumbers[0]
+    onlyNumbers.slice(1).forEach((num) => {
+      result /= num
+    })
+    finalSolve.innerText = result
   }
   clickedNumber = []
   clickedItem = []
 }
 
 const clearNumber = () => {
-  screenResult.innerText = ""
+  screenResult.innerHTML = ""
   clickedNumber = []
   clickedItem = []
   result = 0
