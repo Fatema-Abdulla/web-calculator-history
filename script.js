@@ -111,7 +111,6 @@ const finalResult = () => {
     finalSolve.innerText = result
   }
   clickedNumber = [result]
-
   clickedItem = []
 }
 
