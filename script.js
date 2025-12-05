@@ -60,21 +60,13 @@ const clickButton = (index) => {
       clickedNumber.length === 0
     ) {
       clickedItem.push(0)
+      clickedNumber.push(0)
       specificNumber.innerText = 0 + indexNumber
     } else {
       specificNumber.innerText = indexNumber
     }
     clickedItem.push(indexNumber)
   }
-
-  if (
-      clickedItem.length === 0 &&
-      operators.includes(indexNumber) &&
-      checkIsProcess === false &&
-      clickedNumber.length === 0
-    ){
-      clickedNumber.push(0)
-    }
 
   if (!isNaN(indexNumber)) {
     currentNumber += indexNumber
@@ -92,7 +84,7 @@ const clickButton = (index) => {
       currentNumber = ""
     }
     clickedNumber.push(indexNumber)
-    console.log(clickedNumber)
+    console.log(`clicked: ${clickedNumber}`)
   }
   screenResult.appendChild(specificNumber)
 }
