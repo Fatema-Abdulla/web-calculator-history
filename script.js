@@ -62,10 +62,17 @@ const clickButton = (index) => {
       clickedItem.push(0)
       clickedNumber.push(0)
       specificNumber.innerText = 0 + indexNumber
+    } else if (
+      clickedItem.length === 0 &&
+      indexNumber === "." &&
+      checkIsProcess === false
+    ) {
+      specificNumber.innerText = "0" + indexNumber
     } else {
       specificNumber.innerText = indexNumber
     }
     clickedItem.push(indexNumber)
+    console.log(clickedItem)
   }
 
   if (!isNaN(indexNumber)) {
@@ -84,13 +91,13 @@ const clickButton = (index) => {
       currentNumber = ""
     }
     clickedNumber.push(indexNumber)
-    console.log(`clicked: ${clickedNumber}`)
   }
   screenResult.appendChild(specificNumber)
 }
 
 const finalResult = () => {
   screenResult.innerHTML = ""
+  // reference: https://stackoverflow.com/questions/69816276/javascript-arrays-filter-by-type
   const onlyNumbers = clickedNumber.filter((num) => typeof num === "number")
 
   const finalSolve = document.createElement("span")
