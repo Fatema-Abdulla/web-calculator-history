@@ -92,42 +92,47 @@ const clickButton = (index) => {
 
 const finalResult = () => {
   screenResult.innerHTML = ""
+  const operator = calculationNumber.find((item) => operators.includes(item))
+
   // reference: https://stackoverflow.com/questions/69816276/javascript-arrays-filter-by-type
   const onlyNumbers = calculationNumber.filter((num) => typeof num === "number")
 
   const finalSolve = document.createElement("span")
   finalSolve.setAttribute("class", "solve")
-  finalSolve.innerText = ""
   screenResult.appendChild(finalSolve)
 
-  if (calculationNumber.includes("+")) {
-    result = 0
-    onlyNumbers.forEach((num) => {
-      result += num
-    })
-    finalSolve.innerText = result
-  } else if (calculationNumber.includes("-")) {
-    result = onlyNumbers[0]
-    onlyNumbers.slice(1).forEach((num) => {
-      result -= num
-    })
-    finalSolve.innerText = result
-  } else if (calculationNumber.includes("×")) {
-    result = onlyNumbers[0]
-    onlyNumbers.slice(1).forEach((num) => {
-      result *= num
-    })
-    finalSolve.innerText = result
-  } else if (calculationNumber.includes("÷")) {
-    result = onlyNumbers[0]
-    onlyNumbers.slice(1).forEach((num) => {
-      result /= num
-    })
-    finalSolve.innerText = result
+  if (!operator || onlyNumbers.length === 0) {
+    finalSolve.innerText = "0"
+    return
   }
+
+  let result = onlyNumbers[0]
+  for (let i = 1; i < onlyNumbers.length; i++) {
+    const num = onlyNumbers[i]
+
+    switch (operator) {
+      case "+":
+        result += num
+        break
+
+      case "-":
+        result -= num
+        break
+
+      case "×":
+        result *= num
+        break
+
+      case "÷":
+        result /= num
+        break
+    }
+  }
+  finalSolve.innerText = result
   calculationNumber = [result]
-  checkIsProcess = true
   clickedItem = []
+  currentNumber = ""
+  checkIsProcess = true
 }
 
 const clearNumber = () => {
