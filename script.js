@@ -46,28 +46,30 @@ let equalButton = document.querySelector("#n14")
 
 const clickButton = (index) => {
   let indexNumber = calculator[index].innerText
+  let lastItem = clickedItem[clickedItem.length - 1]
+
   const specificNumber = document.createElement("span")
   specificNumber.setAttribute("class", "number-calculator")
   specificNumber.setAttribute("id", `${index}`)
-  if (
-    !operators.includes(indexNumber) ||
-    !operators.includes(clickedItem[clickedItem.length - 1])
+
+  if (operators.includes(indexNumber) && operators.includes(lastItem)) {
+    return
+  } else if (
+    clickedItem.length === 0 &&
+    operators.includes(indexNumber) &&
+    checkIsProcess === false &&
+    calculationNumber.length === 0
   ) {
-    if (
-      clickedItem.length === 0 &&
-      operators.includes(indexNumber) &&
-      checkIsProcess === false &&
-      calculationNumber.length === 0
-    ) {
-      clickedItem.push(0)
-      calculationNumber.push(0)
-      specificNumber.innerText = 0 + indexNumber
-    } else {
-      specificNumber.innerText = indexNumber
-    }
-    clickedItem.push(indexNumber)
-    console.log(clickedItem)
+    clickedItem.push(0)
+    calculationNumber.push(0)
+    specificNumber.innerText = 0 + indexNumber
+  } else if (indexNumber === "." && lastItem === ".") {
+    return
+  } else {
+    specificNumber.innerText = indexNumber
   }
+  clickedItem.push(indexNumber)
+
 
   if (!isNaN(indexNumber)) {
     currentNumber += indexNumber
@@ -92,17 +94,18 @@ const clickButton = (index) => {
 
 const finalResult = () => {
   screenResult.innerHTML = ""
+  let itemBeforeEqual = clickedItem[clickedItem.length - 2]
   const operator = calculationNumber.find((item) => operators.includes(item))
 
   // reference: https://stackoverflow.com/questions/69816276/javascript-arrays-filter-by-type
   const onlyNumbers = calculationNumber.filter((num) => typeof num === "number")
 
-  const finalSolve = document.createElement("span")
-  finalSolve.setAttribute("class", "solve")
-  screenResult.appendChild(finalSolve)
+  const showResult = document.createElement("span")
+  showResult.setAttribute("class", "solve")
+  screenResult.appendChild(showResult)
 
-  if (!operator || onlyNumbers.length === 0) {
-    finalSolve.innerText = "0"
+  if (!operator || onlyNumbers.length === 0 || itemBeforeEqual === "." || operators.includes(itemBeforeEqual)) {
+    showResult.innerText = "Syntax Error"
     return
   }
 
@@ -128,7 +131,8 @@ const finalResult = () => {
         break
     }
   }
-  finalSolve.innerText = result
+
+  showResult.innerText = result
   calculationNumber = [result]
   clickedItem = []
   currentNumber = ""
