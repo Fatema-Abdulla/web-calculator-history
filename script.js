@@ -2,6 +2,7 @@
 let calculationNumber = []
 let clickedItem = []
 let currentNumber = ""
+let stringResult = ""
 let result = 0
 let checkIsProcess = false
 
@@ -63,23 +64,34 @@ const clickButton = (index) => {
     clickedItem.push(0)
     calculationNumber.push(0)
     specificNumber.innerText = 0 + indexNumber
-  } else if (indexNumber === "." && lastItem === ".") {
+  } else if (indexNumber === "." && currentNumber.includes(".")) {
     return
   } else {
     specificNumber.innerText = indexNumber
   }
   clickedItem.push(indexNumber)
 
+  if (checkIsProcess === true && currentNumber === "") {
+    stringResult = result.toString()
+  }
 
   if (!isNaN(indexNumber)) {
     currentNumber += indexNumber
+    stringResult = ""
+    checkIsProcess = false
   } else if (indexNumber === ".") {
-    if (!currentNumber.includes(".")) {
+    if (stringResult.includes(".")) {
+        return
+      }
+    else if (!currentNumber.includes(".")) {
       if (currentNumber === "") {
-        currentNumber = "0."
-        specificNumber.innerText = 0 + indexNumber
+        if (checkIsProcess === false) {
+          currentNumber = "0."
+          specificNumber.innerText = 0 + indexNumber
+        }
       } else {
         currentNumber += "."
+        specificNumber.innerText = "."
       }
     }
   } else {
@@ -104,12 +116,17 @@ const finalResult = () => {
   showResult.setAttribute("class", "solve")
   screenResult.appendChild(showResult)
 
-  if (!operator || onlyNumbers.length === 0 || itemBeforeEqual === "." || operators.includes(itemBeforeEqual)) {
+  if (
+    !operator ||
+    onlyNumbers.length === 0 ||
+    itemBeforeEqual === "." ||
+    operators.includes(itemBeforeEqual)
+  ) {
     showResult.innerText = "Syntax Error"
     return
   }
 
-  let result = onlyNumbers[0]
+  result = onlyNumbers[0]
   for (let i = 1; i < onlyNumbers.length; i++) {
     const num = onlyNumbers[i]
 
@@ -136,11 +153,14 @@ const finalResult = () => {
   calculationNumber = [result]
   clickedItem = []
   currentNumber = ""
+  stringResult  = ""
   checkIsProcess = true
 }
 
 const clearNumber = () => {
   screenResult.innerHTML = ""
+  currentNumber = ""
+  stringResult  = ""
   calculationNumber = []
   clickedItem = []
   result = 0
