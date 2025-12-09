@@ -2,7 +2,7 @@
 let calculationNumber = []
 let clickedItem = []
 let currentNumber = ""
-let stringResult = ""
+let previousResult = ""
 let result = 0
 let checkIsProcess = false
 
@@ -71,19 +71,21 @@ const clickButton = (index) => {
   }
   clickedItem.push(indexNumber)
 
-  if (checkIsProcess === true && currentNumber === "") {
-    stringResult = result.toString()
+  if (indexNumber === "." && operators.includes(lastItem)) {
+    checkIsProcess = false
+  }
+
+  if (indexNumber === "." && checkIsProcess === true) {
+    previousResult = result.toString()
+    if (previousResult.includes(".")) {
+      return
+    }
   }
 
   if (!isNaN(indexNumber)) {
     currentNumber += indexNumber
-    stringResult = ""
-    checkIsProcess = false
   } else if (indexNumber === ".") {
-    if (stringResult.includes(".")) {
-        return
-      }
-    else if (!currentNumber.includes(".")) {
+    if (!currentNumber.includes(".")) {
       if (currentNumber === "") {
         if (checkIsProcess === false) {
           currentNumber = "0."
@@ -153,14 +155,14 @@ const finalResult = () => {
   calculationNumber = [result]
   clickedItem = []
   currentNumber = ""
-  stringResult  = ""
+  previousResult = ""
   checkIsProcess = true
 }
 
 const clearNumber = () => {
   screenResult.innerHTML = ""
   currentNumber = ""
-  stringResult  = ""
+  previousResult = ""
   calculationNumber = []
   clickedItem = []
   result = 0
