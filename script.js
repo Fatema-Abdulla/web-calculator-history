@@ -3,6 +3,7 @@ let calculationNumber = []
 let clickedItem = []
 let currentNumber = ""
 let previousResult = ""
+let expression = ""
 let result = 0
 let checkIsProcess = false
 
@@ -98,7 +99,7 @@ const clickButton = (index) => {
     }
   } else {
     if (currentNumber !== "") {
-      calculationNumber.push(parseFloat(currentNumber))
+      calculationNumber.push(math.bignumber(currentNumber))
       currentNumber = ""
     }
     calculationNumber.push(indexNumber)
@@ -109,53 +110,40 @@ const clickButton = (index) => {
 const finalResult = () => {
   screenResult.innerHTML = ""
   let itemBeforeEqual = clickedItem[clickedItem.length - 2]
-  const operator = calculationNumber.find((item) => operators.includes(item))
-
-  // reference: https://stackoverflow.com/questions/69816276/javascript-arrays-filter-by-type
-  const onlyNumbers = calculationNumber.filter((num) => typeof num === "number")
 
   const showResult = document.createElement("span")
   showResult.setAttribute("class", "solve")
   screenResult.appendChild(showResult)
 
   if (
-    !operator ||
-    onlyNumbers.length === 0 ||
+    calculationNumber.length === 0 ||
     itemBeforeEqual === "." ||
-    operators.includes(itemBeforeEqual)
+    operators.includes(itemBeforeEqual) ||
+    itemBeforeEqual === undefined
   ) {
     showResult.innerText = "Syntax Error"
     return
   }
 
-  // reference: https://medium.com/@riteshsinha_62295/front-end-dilemmas-tackling-precision-problems-in-javascript-with-decimal-js-c38a9ae24ddd
-  result = new Decimal(onlyNumbers[0])
-  for (let i = 1; i < onlyNumbers.length; i++) {
-    const num = new Decimal(onlyNumbers[i])
+  // reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join
+  // reference: https://mathjs.org/index.html
+  // reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions
+  math.config({
+    number: "BigNumber",
+    precision: 64,
+  })
 
-    // reference: https://mikemcl.github.io/decimal.js/#Dsub
+  expression = calculationNumber
+    .filter((item) => item !== "=")
+    .join("")
+    .replace(/×/g, "*")
+    .replace(/÷/g, "/")
+    .replace(/(\d+(\.\d+)?)/g, 'bignumber("$1")') // only take the number excepted operations
 
-    switch (operator) {
-      case "+":
-        result = result.plus(num)
-        break
-
-      case "-":
-        result = result.sub(num)
-        break
-
-      case "×":
-        result = result.times(num)
-        break
-
-      case "÷":
-        result = result.div(num)
-        break
-    }
-  }
+  result = math.evaluate(expression)
 
   showResult.innerText = result.toString()
-  calculationNumber = [parseFloat(result)]
+  calculationNumber = [result.toString()]
   clickedItem = []
   currentNumber = ""
   previousResult = ""
