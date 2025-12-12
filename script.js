@@ -128,31 +128,34 @@ const finalResult = () => {
     return
   }
 
-  result = onlyNumbers[0]
+  // reference: https://medium.com/@riteshsinha_62295/front-end-dilemmas-tackling-precision-problems-in-javascript-with-decimal-js-c38a9ae24ddd
+  result = new Decimal(onlyNumbers[0])
   for (let i = 1; i < onlyNumbers.length; i++) {
-    const num = onlyNumbers[i]
+    const num = new Decimal(onlyNumbers[i])
+
+    // reference: https://mikemcl.github.io/decimal.js/#Dsub
 
     switch (operator) {
       case "+":
-        result += num
+        result = result.plus(num)
         break
 
       case "-":
-        result -= num
+        result = result.sub(num)
         break
 
       case "×":
-        result *= num
+        result = result.times(num)
         break
 
       case "÷":
-        result /= num
+        result = result.div(num)
         break
     }
   }
 
-  showResult.innerText = result
-  calculationNumber = [result]
+  showResult.innerText = result.toString()
+  calculationNumber = [parseFloat(result)]
   clickedItem = []
   currentNumber = ""
   previousResult = ""
