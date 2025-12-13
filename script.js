@@ -56,6 +56,11 @@ const clickButton = (index) => {
   specificNumber.setAttribute("class", "number-calculator")
   specificNumber.setAttribute("id", `${index}`)
 
+  if (indexNumber === ".") {
+    if (currentNumber.includes(".")) return
+    if (checkIsProcess === true && previousResult.includes(".")) return
+  }
+
   if (operators.includes(indexNumber) && operators.includes(lastItem)) {
     return
   } else if (
@@ -81,6 +86,18 @@ const clickButton = (index) => {
     checkIsProcess = false
   }
 
+  if (checkIsProcess === true && !operators.includes(indexNumber)) {
+    if (indexNumber === ".") {
+      currentNumber = previousResult
+      calculationNumber = []
+    } else {
+      currentNumber = ""
+      calculationNumber = []
+    }
+    clickedItem = []
+    checkIsProcess = false
+  }
+
   if (!isNaN(indexNumber)) {
     currentNumber += indexNumber
     console.log(currentNumber)
@@ -89,13 +106,7 @@ const clickButton = (index) => {
       if (currentNumber === "") {
         if (checkIsProcess === false) {
           currentNumber = "0."
-          console.log(clickedItem)
           specificNumber.innerText = 0 + indexNumber
-        } else if (checkIsProcess === true) {
-          previousResult = result.toString()
-          if (previousResult.includes(".")) {
-            return
-          }
         }
       } else {
         currentNumber += "."
@@ -107,6 +118,7 @@ const clickButton = (index) => {
       calculationNumber.push(currentNumber)
       currentNumber = ""
     }
+    console.log(clickedItem)
     calculationNumber.push(indexNumber)
   }
   screenResult.appendChild(specificNumber)
